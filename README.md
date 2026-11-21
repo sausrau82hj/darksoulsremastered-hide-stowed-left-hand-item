@@ -1,4 +1,4 @@
-# Hide Stowed left-hand item — *Dark Souls: Remastered*
+# Hide Stowed Left-Hand Item — *Dark Souls: Remastered*
 
 While you two-hand the **right-hand** weapon, the model of whatever sits in your **left** hand — shield, bow, talisman, catalyst, staff — **is no longer drawn**. Let go and it comes straight back.
 

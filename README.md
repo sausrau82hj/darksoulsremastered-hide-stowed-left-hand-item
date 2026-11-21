@@ -10,8 +10,6 @@ While you two-hand the **right-hand** weapon, the model of whatever sits in your
 
 Place `dinput8.dll` into the game directory (next to `DarkSoulsRemastered.exe`).
 
-Only one download method is listed here.
-
 ## Source & build
 
 `src/mod.cpp` is the mod itself; `src/proxy.cpp` and `src/proxy.def` are the dinput8 proxy shell that forwards `DirectInput8Create` (plus the legacy joystick export). Needs the Desktop C++ workload of VS Build Tools — one line from an "x64 Native Tools Command Prompt for VS", run in the repo root:

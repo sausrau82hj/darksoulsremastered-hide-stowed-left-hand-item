@@ -43,6 +43,38 @@ extern "C" __declspec(dllexport) HRESULT WINAPI GetdfDIJoystick(void)
     return 0;
 }
 
+extern "C" __declspec(dllexport) HRESULT WINAPI DllCanUnloadNow(void)
+{
+    LoadReal();
+    typedef HRESULT(WINAPI* F)(void);
+    F f = g_real ? (F)GetProcAddress(g_real, "DllCanUnloadNow") : nullptr;
+    return f ? f() : S_FALSE;
+}
+
+extern "C" __declspec(dllexport) HRESULT WINAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void** out)
+{
+    LoadReal();
+    typedef HRESULT(WINAPI* F)(REFCLSID, REFIID, void**);
+    F f = g_real ? (F)GetProcAddress(g_real, "DllGetClassObject") : nullptr;
+    return f ? f(clsid, iid, out) : CLASS_E_CLASSNOTAVAILABLE;
+}
+
+extern "C" __declspec(dllexport) HRESULT WINAPI DllRegisterServer(void)
+{
+    LoadReal();
+    typedef HRESULT(WINAPI* F)(void);
+    F f = g_real ? (F)GetProcAddress(g_real, "DllRegisterServer") : nullptr;
+    return f ? f() : E_FAIL;
+}
+
+extern "C" __declspec(dllexport) HRESULT WINAPI DllUnregisterServer(void)
+{
+    LoadReal();
+    typedef HRESULT(WINAPI* F)(void);
+    F f = g_real ? (F)GetProcAddress(g_real, "DllUnregisterServer") : nullptr;
+    return f ? f() : E_FAIL;
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
 {
     if (reason == DLL_PROCESS_ATTACH) {

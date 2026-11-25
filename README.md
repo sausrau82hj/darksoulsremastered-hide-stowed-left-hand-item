@@ -12,7 +12,7 @@ Place `dinput8.dll` into the game directory (next to `DarkSoulsRemastered.exe`).
 
 ## Source & build
 
-`src/mod.cpp` is the mod itself; `src/proxy.cpp` and `src/proxy.def` are the dinput8 proxy shell that forwards `DirectInput8Create` (plus the legacy joystick export). Needs the Desktop C++ workload of VS Build Tools — one line from an "x64 Native Tools Command Prompt for VS", run in the repo root:
+`src/mod.cpp` is the mod itself; `src/proxy.cpp` and `src/proxy.def` are the dinput8 proxy shell that forwards all six entries the system DLL exports — `DirectInput8Create`, `GetdfDIJoystick` and the four COM/registration entry points. Needs the Desktop C++ workload of VS Build Tools — one line from an "x64 Native Tools Command Prompt for VS", run in the repo root:
 
 ```bat
 cl /nologo /std:c++17 /EHsc /O2 /MT /LD /Fe:dinput8.dll src\proxy.cpp src\mod.cpp /link /SUBSYSTEM:WINDOWS /DEF:src\proxy.def /NOLOGO

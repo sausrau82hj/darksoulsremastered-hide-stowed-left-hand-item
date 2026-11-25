@@ -171,6 +171,29 @@ static uintptr_t FindRow(uint32_t slotValue, uint32_t* rowIdOut)
     return g_wparamBase + bestOff;
 }
 
+static uintptr_t FindRowById(uint32_t rowId)
+{
+    if (!g_wparamBase || !rowId) return 0;
+    if (g_wparamCount) {
+        uint32_t lo = 0, hi = g_wparamCount - 1;
+        while (lo <= hi) {
+            uint32_t mid = lo + (hi - lo) / 2;
+            uintptr_t inf = g_wparamBase + 0x30 + (uintptr_t)mid * WPARAM_ROWSTRIDE;
+            uint32_t id = Rd32(inf), off = Rd32(inf + 4);
+            if (!id) break;
+            if (id == rowId) return off ? g_wparamBase + off : 0;
+            if (id < rowId) lo = mid + 1;
+            else { if (mid == 0) break; hi = mid - 1; }
+        }
+    }
+    for (uint32_t i = 0; i < g_wparamCount; i++) {
+        uintptr_t inf = g_wparamBase + 0x30 + (uintptr_t)i * WPARAM_ROWSTRIDE;
+        uint32_t id = Rd32(inf), off = Rd32(inf + 4);
+        if (id == rowId && off) return g_wparamBase + off;
+    }
+    return 0;
+}
+
 struct RowSave { uint32_t rowId; uint16_t model; };
 static std::vector<RowSave> g_rowSaves;
 
@@ -395,7 +418,7 @@ static DWORD WINAPI ModThread(LPVOID)
 
     if (s_hidden) RestoreModel();
     for (size_t i = 0; i < g_rowSaves.size(); i++) {
-        uintptr_t row = FindRow(g_rowSaves[i].rowId, nullptr);
+        uintptr_t row = FindRowById(g_rowSaves[i].rowId);
         if (row) Wr16(row + WPARAM_MODELOFF, g_rowSaves[i].model);
     }
     timeEndPeriod(1);
